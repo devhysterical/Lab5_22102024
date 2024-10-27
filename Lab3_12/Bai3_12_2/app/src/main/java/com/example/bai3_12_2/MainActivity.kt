@@ -1,29 +1,29 @@
 package com.example.bai3_12_2
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var userAdapter: UserAdapter
-    private lateinit var userViewModel: UserViewModel
+    private val viewModel: UserViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        recyclerView = findViewById(R.id.recyclerView)
+
+        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        userViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
-        // Lắng nghe sự thay đổi của danh sách người dùng
-        userViewModel.users.observe(this, Observer { users ->
-            userAdapter = UserAdapter(users)
-            recyclerView.adapter = userAdapter
-        })
+
+        viewModel.fetchUsers { users ->
+            recyclerView.adapter = UserAdapter(users)
+        }
+
+        // Ví dụ: Thêm người dùng mới
+        val newUser = User(name = "John Doe", email = "john@example.com", avatar = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAFAjK_0YbdY6NnrQ6gtG463vBLCytvojCPw&s")
+        viewModel.addUser(newUser) { user ->
+            println("User added: $user")
+        }
     }
 }
