@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/nav_graph"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     app:startDestination="@id/firstFragment">
 
     <fragment
         android:id="@+id/firstFragment"
         android:name="com.example.bai3_14.fragments.FirstFragment"
-        android:label="FirstFragment">
+        android:label="First Fragment">
         <action
             android:id="@+id/action_firstFragment_to_secondFragment"
             app:destination="@id/secondFragment" />
@@ -15,5 +15,9 @@
     <fragment
         android:id="@+id/secondFragment"
         android:name="com.example.bai3_14.fragments.SecondFragment"
-        android:label="SecondFragment" />
+        android:label="Second Fragment">
+        <argument
+            android:name="cartItems"
+            app:argType="string[]" />
+    </fragment>
 </navigation>

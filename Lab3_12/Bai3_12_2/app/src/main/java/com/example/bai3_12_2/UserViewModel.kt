@@ -1,27 +1,29 @@
 package com.example.bai3_12_2
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class UserViewModel : ViewModel() {
-    private val api = ApiClient.apiService
 
-    // Hàm để lấy danh sách người dùng
-    fun fetchUsers(onResult: (List<User>) -> Unit) {
-        viewModelScope.launch {
-            val users = api.getUsers()
-            onResult(users)
-        }
+    private val _users = MutableLiveData<List<User>>()
+    val users: LiveData<List<User>> get() = _users
+
+    init {
+        loadUsers()
     }
 
-    // Hàm để thêm người dùng mới
-    fun addUser(user: User, onResult: (User) -> Unit) {
+    private fun loadUsers() {
         viewModelScope.launch {
-            val newUser = api.addUser(user)
-            onResult(newUser)
+            try {
+                val userList = ApiClient.apiService.getUsers() // Lấy danh sách người dùng từ API
+                _users.value = userList // Gán danh sách người dùng vào LiveData
+            } catch (e: Exception) {
+                e.printStackTrace() // In ra log để kiểm tra lỗi
+                _users.value = emptyList() // Gán danh sách rỗng nếu có lỗi
+            }
         }
     }
 }

@@ -1,28 +1,36 @@
 package com.example.bai3_13_1_2
 
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
+import com.example.bai3_13_1_2.R
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var editTextNumber: EditText
+    private lateinit var buttonCheck: Button
+    private lateinit var textViewResult: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val editText = findViewById<EditText>(R.id.editTextNumber)
-        val button = findViewById<Button>(R.id.buttonCheck)
-        val textView = findViewById<TextView>(R.id.textViewResult)
-        button.setOnClickListener {
-            val number = editText.text.toString().toIntOrNull()
-            if (number != null) {
+
+        editTextNumber = findViewById(R.id.editTextNumber)
+        buttonCheck = findViewById(R.id.buttonCheck)
+        textViewResult = findViewById(R.id.textViewResult)
+
+        buttonCheck.setOnClickListener {
+            val number = editTextNumber.text.toString().toIntOrNull()
+            textViewResult.text = if (number != null) {
                 if (number % 2 == 0) {
-                    textView.text = "Even Number"
+                    "Even Number"
                 } else {
-                    textView.text = "Odd Number"
+                    "Odd Number"
                 }
             } else {
-                textView.text = "Invalid Input"
+                "Please enter a valid number"
             }
         }
     }

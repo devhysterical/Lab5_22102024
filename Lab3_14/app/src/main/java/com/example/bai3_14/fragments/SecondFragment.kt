@@ -6,25 +6,23 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.bai3_14.R
-import com.google.android.gms.analytics.ecommerce.Product
 import com.example.bai3_14.adapters.ProductAdapter
-import kotlinx.android.synthetic.main.fragment_second.*
 
-class SecondFragment : Fragment() {
-    private val cart = mutableListOf<Product>() // Lấy từ FirstFragment (có thể dùng ViewModel)
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_second, container, false)
-    }
+class SecondFragment : Fragment(R.layout.fragment_second) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        recyclerViewCart.layoutManager = LinearLayoutManager(requireContext())
-        recyclerViewCart.adapter = ProductAdapter(cart) {}
+        // Nhận dữ liệu giỏ hàng từ Bundle
+        val cartItems = arguments?.getStringArray("cartItems") ?: emptyArray()
+
+        // Thiết lập RecyclerView để hiển thị giỏ hàng
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewCart)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        // Tạo adapter cho RecyclerView với danh sách sản phẩm trong giỏ hàng
+        recyclerView.adapter = ProductAdapter(cartItems.toList(), null) // Thay null bằng hành động khi nhấp vào nếu cần
     }
 }
